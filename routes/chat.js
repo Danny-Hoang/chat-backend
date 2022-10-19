@@ -12,3 +12,5 @@ router.get("/recent", async function (req, res) {
 	let [results] = await pool.query(sql, [event_id]);
 	res.send({ error: false, data: results, message: "chat room list." });
 });
+
+module.exports = router;
