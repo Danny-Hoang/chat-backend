@@ -3,11 +3,15 @@ const router = express.Router();
 // database
 let pool = require("../config/mysql");
 
-router.get("/", async function (req, res) {
-    
-    let sql = `SELECT * FROM Message`;
-	let [results] = await pool.query(sql, []);
-	res.send({ error: false, data: results, message: "place list." });
+router.get("/:event_id", async function (req, res) {
+    let { event_id } = req.params;
+    let sql = `SELECT m.id, m.time, m.content, e.title, u.username, u.avatar, u.email FROM Message m
+        INNER JOIN Event e ON m.event_id = e.id
+        INNER JOIN User u ON m.user_id = u.id
+        WHERE e.id = ?
+    `;
+	let [results] = await pool.query(sql, [event_id]);
+	res.send({ error: false, data: results, message: "message list." });
 });
 
 router.post('/', async function (req, res) {
