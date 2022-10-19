@@ -6,16 +6,8 @@ var session = require("express-session");
 const logger = require("morgan");
 
 const authRoute = require("./routes/auth");
-const eventRoute = require("./routes/event");
 const uploadRoute = require("./routes/upload");
-const placeRoute = require("./routes/place");
-const eventTypeRoute = require("./routes/eventType");
 const imagesRoute = require("./routes/images");
-const attachmentRoute = require("./routes/attachment");
-const customerRoute = require("./routes/customer")
-const addressRoute = require("./routes/address")
-const menuRoute = require("./routes/menu")
-const orderRoute = require("./routes/order")
 const passportSetup = require("./passport");
 const passport = require("passport");
 let cookieParser = require("cookie-parser");
@@ -44,17 +36,8 @@ app.use(
 );
 
 app.use("/auth", authRoute);
-app.use("/events", eventRoute);
-app.use("/places", placeRoute);
 app.use("/upload", uploadRoute);
 app.use("/images", imagesRoute);
-app.use("/attachments", attachmentRoute);
-app.use("/event_types", eventTypeRoute);
-app.use("/customers", customerRoute);
-app.use("/address", addressRoute);
-app.use("/menus", menuRoute);
-app.use("/menus", menuRoute);
-app.use("/order", orderRoute);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
