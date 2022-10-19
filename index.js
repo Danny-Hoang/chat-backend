@@ -9,6 +9,8 @@ const authRoute = require("./routes/auth");
 const uploadRoute = require("./routes/upload");
 const imagesRoute = require("./routes/images");
 const passportSetup = require("./passport");
+const chatRoute = require("./routes/chat")
+const messageRoute = require("./routes/message")
 const passport = require("passport");
 let cookieParser = require("cookie-parser");
 app.use(cookieParser());
@@ -37,6 +39,8 @@ app.use(
 
 app.use("/auth", authRoute);
 app.use("/upload", uploadRoute);
+app.use("/chat", chatRoute);
+app.use("/messages", messageRoute);
 app.use("/images", imagesRoute);
 
 // catch 404 and forward to error handler
