@@ -23,10 +23,9 @@ passport.use(
       passReqToCallback: true,
     },
     async function (request, accessToken, refreshToken, profile, done) {
-        const [results] = await pool.query(`SELECT * from User`)
-        console.log(JSON.stringify(results))
-        console.log(JSON.stringify(profile))
+        const [results] = await pool.query(`SELECT username, id, email from User where email = ?`, profile?.emails[0]?.value)
         request.user = profile;
+        request.user.db_user = results[0];
       done(null, profile);
     }
   )

@@ -8,7 +8,7 @@ router.get("/:event_id", async function (req, res) {
     let sql = `SELECT m.id, m.time, m.content, e.title, u.username, u.avatar, u.email FROM Message m
         INNER JOIN Event e ON m.event_id = e.id
         INNER JOIN User u ON m.user_id = u.id
-        WHERE e.id = ?
+        WHERE e.id = ? ORDER BY m.time ASC
     `;
 	let [results] = await pool.query(sql, [event_id]);
 	res.send({ error: false, data: results, message: "message list." });
@@ -23,7 +23,7 @@ router.post('/', async function (req, res) {
 
     try {
 
-        let [{ insertId, affectedRows: insert_affected_rows }] = await connection.query(insert_sql, [eventId, userId, content, time]);
+        let [{ insertId, affectedRows: insert_affected_rows, ...rest }] = await connection.query(insert_sql, [eventId, userId, content, time]);
 
         if (insert_affected_rows === 0) {
             await connection.rollback();
@@ -31,10 +31,17 @@ router.post('/', async function (req, res) {
             return;
         }
 
+        let sql = `SELECT m.id, m.time, m.content, e.title, u.username, u.avatar, u.email FROM Message m
+            INNER JOIN Event e ON m.event_id = e.id
+            INNER JOIN User u ON m.user_id = u.id
+            WHERE m.id = ? LIMIT 1
+        `;
+        let [results] = await pool.query(sql, [insertId]);
+
         res.json({
             status: true,
             msg: "success!",
-            data: { id : insertId }
+            data: results
         });
         
     } catch (error) {
